@@ -3,8 +3,8 @@
 -- can be step on by character
 -- fixed location, cannot move
 
-local Obstacle
-Obstacle = {position = Vector3()}
+local obstacle = {}
+setmetatable(obstacle, {__mode = "k"})
 
 -- Base class method new
 function Obstacle:new (o, position)

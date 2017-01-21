@@ -1,23 +1,23 @@
-local Player = require "Player"
+local Player = require 'Player'
 -- require "Obstacle"
 -- require "Addon"
--- require "Ship"
+
+require 'Ship'
 
 function createScene()
 	-- body
-	Player.new ()     
-	-- player_env = 
+	--Player.new ()     
 
 	-- create an array of obstacles
 	-- obs = {}
 	-- for i=1,10 do
 	-- 	obs[i] = Obstacle:new(i) 
 	-- end
-
-	-- ships = {}
- --    for i=1,10 do
-	-- 	ships[i] = Ship:new(i) 
-	-- end
+   
+  ships = {}
+  for i=1,10 do
+	 	ships[i] = Ship.create(i) 
+	end
 
 
 end
@@ -65,5 +65,10 @@ function love.draw()
     --love.graphics.print("Islander", 400, 300)
     --love.graphics.draw(image, x, y, 0, 0.5, 0.5, 0, 0)
     --Player.draw()
-    Player.draw()
+    --Player.draw()
+
+    for i=1,10 do
+      ships[i]:draw()
+    end
+
 end
