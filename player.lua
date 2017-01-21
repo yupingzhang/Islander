@@ -1,40 +1,45 @@
--- Meta module
-local Player = {}
+Player = {}
+Player.__index = Player
 
 -- Derived class method new
 function Player.loadImages()
-	p_img = love.graphics.newImage("a.png")
+	return love.graphics.newImage("/Assets/Idle/Islander_Idle_Up.png")
 end
 
 function Player.new ()
-    posx = 50
-    posy = 50
+	local player = {}
+	setmetatable(player, Player) 
+    player.posx = 50
+    player.posy = 50
     -- p_img = love.graphics.newImage("a.png")
-    Player.loadImages()
-    return o
+    player.img = Player.loadImages()
+    return player
 end
 
-function Player.handleUpdate()
+function Player:handleUpdate()
 	local dt = 0.01
 	local speed = 300
 	if love.keyboard.isDown("right") then
-	  posx = posx + (speed * dt)
+	  self.posx = self.posx + (speed * dt)
 	end
 	if love.keyboard.isDown("left") then
-	  posx = posx - (speed * dt)
+	  self.posx = self.posx - (speed * dt)
 	end
 	if love.keyboard.isDown("down") then
-	  posy = posy + (speed * dt)
+	  self.posy = self.posy + (speed * dt)
 	end
 	if love.keyboard.isDown("up") then
-	  posy = posy - (speed * dt)
+	  self.posy = self.posy - (speed * dt)
 	end
 end
 
-function Player.draw()
-    --love.graphics.print("Islander", 400, 300)
-    love.graphics.draw(p_img, posx, posy, 0, 0.5, 0.5, 0, 0)
+function Player:getPosition()
+	local pos = { self.posx, self.posy }
+	return pos
 end
 
-
-return Player
+function Player:draw()
+    --love.graphics.print("Islander", 400, 300)
+    love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+    -- for animation, use an array for img, update the current active img index
+end
