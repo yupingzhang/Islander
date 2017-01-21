@@ -16,8 +16,8 @@ end
 
 function Ship:move(dir, speed)
 	-- update pos
-	--self.posx = self.posx + ( dir[0] * speed );
-	--self.posy = self.posy + ( dir[1] * speed );
+	self.posx = self.posx + ( dir[1] * speed );
+	self.posy = self.posy + ( dir[2] * speed );
 end
 
 function Ship:draw()

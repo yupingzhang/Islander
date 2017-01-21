@@ -38,6 +38,11 @@ function Player:getPosition()
 	return pos
 end
 
+-- check if the character is on anything and not falling into the ocean
+function alivechecking()
+	-- body
+end
+
 function Player:draw()
     --love.graphics.print("Islander", 400, 300)
     love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)

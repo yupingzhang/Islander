@@ -7,11 +7,12 @@ require 'Ship'
 
 -- const
 local ocean_waves_dir = {1, 0}
-local ocean_waves_speed = 50
+local ocean_waves_speed = 5
 local num_ships = 5
 local num_obs = 10
 local map_display_h = 4
 local map_display_w = 4
+local window_size = { love.graphics.getWidth(), love.graphics.getHeight() }
 
 -- giving the character position, center the camera and only draw the tiles visiable
 function draw_map(pos)
@@ -44,12 +45,20 @@ function createScene()
   for i=1,num_ships do
 	 	ships[i] = Ship.create(i) 
 	end
+end
+
+--TODO
+-- update scene, delete invisible and generate more
+function updateScene()
+
 
 
 end
 
-function love.load()
 
+
+function love.load()
+   -- random new seeds
    math.randomseed( os.time() )
    -- local f = love.graphics.newFont(12)
    -- love.graphics.setFont(f)
@@ -66,7 +75,7 @@ function love.update(dt)
     player_main:handleUpdate()
 
     for i=1,num_ships do
-      ships[i]:move(ocean_waves_dir, ocean_waves_speed)
+        ships[i]:move(ocean_waves_dir, ocean_waves_speed)
     end
 
 end
