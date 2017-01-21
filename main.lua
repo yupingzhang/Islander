@@ -7,7 +7,7 @@ require 'Ship'
 
 -- const
 local ocean_waves_dir = {1, 0}
-local ocean_waves_speed = 5
+local ocean_waves_speed = 2
 local num_ships = 5
 local num_obs = 10
 local map_display_h = 4
@@ -46,15 +46,6 @@ function createScene()
 	 	ships[i] = Ship.create(i) 
 	end
 end
-
---TODO
--- update scene, delete invisible and generate more
-function updateScene()
-
-
-
-end
-
 
 
 function love.load()

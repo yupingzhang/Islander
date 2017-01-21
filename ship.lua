@@ -18,7 +18,13 @@ function Ship:move(dir, speed)
 	-- update pos
 	self.posx = self.posx + ( dir[1] * speed );
 	self.posy = self.posy + ( dir[2] * speed );
+
+   if self.posx > 800 then
+      self.posx = 0  
+      self.posy = math.random(600) 
+   end
 end
+
 
 function Ship:draw()
 	love.graphics.draw(self.img, self.posx, self.posy, 0, 0.2, 0.2, 0, 0)
