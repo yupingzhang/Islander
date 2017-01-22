@@ -4,6 +4,7 @@ require "Island"
 require "Addon"
 require 'Ship'
 require 'Wind'
+require 'Camera'
 
 local util = require "Utility"
 
@@ -17,11 +18,11 @@ local wind_dir_scale = 0.005
 local wind_tlimit = 15         -- time in seconds generating wind per stroke
 local ocean_waves_dir = {1, 0}
 local ocean_waves_speed = 1
-local num_ships = 5
-local num_islands = 15
+local num_ships = 25
+local num_islands = 10
 local map_display_h = 3
 local map_display_w = 4
-local map_size = { 3000, 2200 }
+local map_size = { 800, 2000 }
 local window_size = { love.graphics.getWidth(), love.graphics.getHeight() } -- 800, 600
 
 -- giving the character position, center the camera and only draw the tiles visiable
@@ -40,26 +41,31 @@ function draw_map(pos)
 end
 
 function createScene()
+  -- camera
+  cam = Camera.new ()
+
 	-- character
   player = Player.new ()
 
 	-- create an array of islands
+  islands = {}
   random_pos = util.randomControl(map_size[1], map_size[2], num_islands)
-	islands = {}
   -- create the start point
-  islands[1] = Island.create(1, 400, 500)
-
+  islands[1] = Island.create(1, 200, 1900)
 	for i=2,num_islands do
 		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
+  -- create the end destination
+  islands[num_islands + 1] = Island.create(num_islands + 1, map_size[1] - 300, map_size[2] - 300)
 
   player:setPosition( {islands[1].posx, islands[1].posy} ) 
+  cam:setPosition(0, 0)  -- {islands[1].posx, islands[1].posy} 
    
   -- array of ships 
-  -- util.randomControl()
+  random_pos = util.randomControl(map_size[1], map_size[2], num_ships)
   ships = {}
   for i=1,num_ships do
-	 	ships[i] = Ship.create(i) 
+	 	ships[i] = Ship.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
 
 end
@@ -73,7 +79,12 @@ function love.load()
    start = love.timer.getTime()
    wind = {}
 
+   -- create scene
    createScene() 
+
+   -- audio
+   sound = love.audio.newSource("/Sound/Fearless.mp3", "static")
+   sound:play()
 end
 
 -- when the jump gets triggered
@@ -142,6 +153,10 @@ function love.update(dt)
        return
     end
 
+    -- update camera
+    local p = player:getPosition()
+    cam:setPosition( (p[1] - 400)/10, p[2] - 400 )
+
 end
 
 function love.keypressed(key)
@@ -156,6 +171,8 @@ function love.keypressed(key)
          player:jumpTo(type, idx)
          if type == "ship" then
             ships[idx].active = true  -- active sinking
+         else
+            ships[idx].active = false
          end
       end
    end
@@ -188,6 +205,11 @@ end
 function love.draw()
     -- ocean map
     draw_map( player:getPosition() )
+    local x, y = cam:getPosition()
+    debug_msg = "camera info: " .. string.format("%s", cam.x)
+     
+    cam:set()
+    -- draw stuff
 
     -- islands
     for i=1, num_islands do
@@ -216,12 +238,15 @@ function love.draw()
        love.graphics.setColor(r, g, b, a)
     end
 
+    cam:unset()
+
     -- draw debug info
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor(0, 0, 0, 255)
-    debug_msg = "Player status: onShip? onIsland? " .. string.format("%f", player.onShip) .. string.format("%f", player.onIsland) .. "Isalive: " .. string.format("%s", isalive)
+    -- debug_msg = "Player status: onShip? onIsland? " .. string.format("%f", player.onShip) .. string.format("%f", player.onIsland) .. "Isalive: " .. string.format("%s", isalive)
     -- debug_msg = "Island: " .. string.format("%f %f", islands[2].posx, islands[2].posy)
     love.graphics.printf(debug_msg, 200, 200, 400, "left")
     love.graphics.setColor(r, g, b, a)
+
 end
 

@@ -7,15 +7,15 @@ Ship.__index = Ship
 
 local sink_limit = 100  -- seconds
 
-function Ship.create(i)
+function Ship.create(i, x, y)
    local s = {}              -- our new object
    setmetatable(s, Ship)  
    s.idx = i
    s.active = false          -- flag whether character is on the ship
    s.sank = false
    s.sinkst = 0.0            -- sinking timer
-   s.posx = math.random(800)      
-   s.posy = math.random(600) 
+   s.posx = x or math.random(800)      
+   s.posy = y or math.random(600) 
    s.img = love.graphics.newImage("/Assets/ShellShip-unsank.png")
    s.img2 = love.graphics.newImage("/Assets/ShellShip-sank.png")
    s.img3 = love.graphics.newImage("/Assets/ShellShip-sankest.png")
@@ -60,6 +60,8 @@ function Ship:draw()
          love.graphics.draw(self.img3, self.posx, self.posy, 0, 0.1, 0.1, 0, 0) 
       elseif Ship:sinking() > 0.4 then
          love.graphics.draw(self.img2, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+      else
+         love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
       end
    else
    	love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)

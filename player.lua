@@ -29,16 +29,16 @@ function Player:handleUpdate()
 
 	local dt = 0.01
 	local speed = 300
-	if love.keyboard.isDown("right") then
+	if love.keyboard.isDown("d") then
 	  self.posx = self.posx + (speed * dt)
 	end
-	if love.keyboard.isDown("left") then
+	if love.keyboard.isDown("a") then
 	  self.posx = self.posx - (speed * dt)
 	end
-	if love.keyboard.isDown("down") then
+	if love.keyboard.isDown("s") then
 	  self.posy = self.posy + (speed * dt)
 	end
-	if love.keyboard.isDown("up") then
+	if love.keyboard.isDown("w") then
 	  self.posy = self.posy - (speed * dt)
 	end
 end
