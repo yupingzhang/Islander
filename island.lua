@@ -32,7 +32,7 @@ function Island:ripple(strength)
 	love.graphics.setColor(14, 63, 111)
 	for i=1,strength do
 		-- love.graphics.circle( "line", self.posx+100, self.posy+100, rad_base)
-		love.graphics.ellipse( "line", self.posx+100, self.posy+100, rad_base, rad_base/2)
+		love.graphics.ellipse( "line", self.posx+100, self.posy+100, rad_base + math.random(10), rad_base/2 + math.random(5))
 		rad_base = rad_base + 10
 	end
 	love.graphics.setColor(r, g, b, a);

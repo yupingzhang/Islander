@@ -165,6 +165,10 @@ function love.draw()
 
     player:draw()
 
+    if wind_dir[1] > 0.001 then
+      -- draw wind
+    end
+
     -- draw debug info
     -- love.graphics.setColor(0, 0, 255, 255)
     debug_msg = "Player status: onShip? %f" .. string.format("%f", player.onShip)
