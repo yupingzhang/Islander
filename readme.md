@@ -44,6 +44,10 @@ Class:
 
 -- backpack function
 
+-- flip/mirror islands to have diversity
+
+-- character can walk on island but not on rocks
+
 
 
 -- intro
