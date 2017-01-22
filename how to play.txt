@@ -1,0 +1,12 @@
+how to play
+
+Control
+
+--WASD control the player
+
+--Mouse contro the wind
+
+
+
+
+

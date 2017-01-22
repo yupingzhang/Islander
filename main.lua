@@ -9,6 +9,7 @@ require 'Camera'
 local util = require "Utility"
 
 -- debug
+local debug = false
 local debug_msg = ""
 
 -- const
@@ -242,12 +243,14 @@ function love.draw()
     cam:unset()
 
     -- draw debug info
-    local r, g, b, a = love.graphics.getColor()
-    love.graphics.setColor(0, 0, 0, 255)
-    -- debug_msg = "Player status: onShip? onIsland? " .. string.format("%f", player.onShip) .. string.format("%f", player.onIsland) .. "Isalive: " .. string.format("%s", isalive)
-    -- debug_msg = "Island: " .. string.format("%f %f", islands[2].posx, islands[2].posy)
-    love.graphics.printf(debug_msg, 200, 200, 400, "left")
-    love.graphics.setColor(r, g, b, a)
+    if debug == true then
+      local r, g, b, a = love.graphics.getColor()
+      love.graphics.setColor(0, 0, 0, 255)
+      -- debug_msg = "Player status: onShip? onIsland? " .. string.format("%f", player.onShip) .. string.format("%f", player.onIsland) .. "Isalive: " .. string.format("%s", isalive)
+      -- debug_msg = "Island: " .. string.format("%f %f", islands[2].posx, islands[2].posy)
+      love.graphics.printf(debug_msg, 200, 200, 400, "left")
+      love.graphics.setColor(r, g, b, a)
+    end
 
 end
 
