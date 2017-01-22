@@ -91,7 +91,7 @@ end
 -- check the type of object that the character allows to jump to
 function findnearestshipisland(pos, type)
     local island_threshold = 600.0   -- threshold
-    local ship_threshold = 300.0   -- threshold
+    local ship_threshold = 500.0   -- threshold
     local index = 0;
     if type == "island" then
       for i=1,num_islands do
@@ -230,8 +230,9 @@ function love.draw()
     if isalive == true then
        player:draw()
     else 
+       player:draw()
        _img = love.graphics.newImage("/Assets/gameover.png")
-       love.graphics.draw( _img, 300, 300, 0, 1, 1, 0, 0 )
+       love.graphics.draw( _img, cam.x, cam.y, 0, 0.5, 0.5, 0, 0 )
        -- local r, g, b, a = love.graphics.getColor()
        -- love.graphics.setColor(0, 0, 0, 255)
        -- love.graphics.printf("Game over!!!", 200, 250, 400, "left", 0, 5, 5, 0, 0, 0, 0)
