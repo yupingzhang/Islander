@@ -17,7 +17,7 @@ function Island.create(i, x, y)
    -- o.posy = math.random(400) + 100
    o.posx = x
    o.posy = y
-   o.img = love.graphics.newImage("/Assets/Island_Small.png")
+   o.img = love.graphics.newImage("/Assets/Island_Smaller.png")
    o.addon = nil
    o.visible = true
    return o

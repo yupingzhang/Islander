@@ -149,7 +149,7 @@ function love.update(dt)
        isalive = player:aliveCheck(islands[player.onIsland]:getPosition())
     end
     if isalive == false then
-       -- no update anymore
+       player:die()
        return
     end
 
@@ -230,12 +230,12 @@ function love.draw()
     if isalive == true then
        player:draw()
     else 
-       _img = love.graphics.newImage("a.png")
+       _img = love.graphics.newImage("/Assets/gameover.png")
        love.graphics.draw( _img, 300, 300, 0, 1, 1, 0, 0 )
-       local r, g, b, a = love.graphics.getColor()
-       love.graphics.setColor(0, 0, 0, 255)
-       love.graphics.printf("Game over!!!", 200, 250, 400, "left", 0, 5, 5, 0, 0, 0, 0)
-       love.graphics.setColor(r, g, b, a)
+       -- local r, g, b, a = love.graphics.getColor()
+       -- love.graphics.setColor(0, 0, 0, 255)
+       -- love.graphics.printf("Game over!!!", 200, 250, 400, "left", 0, 5, 5, 0, 0, 0, 0)
+       -- love.graphics.setColor(r, g, b, a)
     end
 
     cam:unset()

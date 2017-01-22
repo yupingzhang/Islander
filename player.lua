@@ -4,9 +4,10 @@ Player = {}
 Player.__index = Player
 
 -- Derived class method new
-function Player.loadImages()
-	return love.graphics.newImage("/Assets/Idle/Islander_Idle_Up.png")
-end
+-- function Player.loadImages()
+-- 	self.img = love.graphics.newImage("/Assets/Idle/Islander_Idle-NoInstrument_Up.png")
+-- 	self.die_img = love.graphics.newImage("/Assets/Idle/Islander_die.png")
+-- end
 
 function Player.new ()
 	local player = {}
@@ -15,9 +16,13 @@ function Player.new ()
     player.posy = 50
     player.delx = 0
     player.dely = 0
-    player.img = Player.loadImages()
     player.onShip = 0      
     player.onIsland = 1
+    player.alive = true
+
+    -- Player.loadImages()
+    player.img = love.graphics.newImage("/Assets/Idle/Islander_Idle-NoInstrument_Up.png")
+	player.die_img = love.graphics.newImage("/Assets/Islander_die.png")
     return player
 end
 
@@ -70,6 +75,10 @@ function Player:aliveCheck(pos)
 	return true -- alive
 end
 
+function Player:die()
+	self.alive = false
+end
+
 function Player:jumpCheck()
 	if self.onShip > 0 then
 		return "island"
@@ -91,7 +100,10 @@ end
 
 
 function Player:draw()
-    --love.graphics.print("Islander", 400, 300)
-    love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
-    -- for animation, use an array for img, update the current active img index
+    if self.alive == true then
+        love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+    else
+    	love.graphics.draw(self.die_img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+    end
+    -- Todo: for animation, use an array for img, update the current active img index
 end
