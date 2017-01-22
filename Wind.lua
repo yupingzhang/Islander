@@ -6,25 +6,22 @@ Wind = {}
 Wind.__index = Wind
 
 
-function Wind.create(i)
+function Wind.create(pos, dir)
    local w = {}             -- our new object
    setmetatable(w, Wind)  
-   w.posx = math.random(800)      
-   w.posy = math.random(600) 
-   w.img = love.graphics.newImage("/Assets/ShellShip.png")
+   w.posx = pos[1] + math.random(300)      
+   w.posy = pos[2] + math.random(200) 
+   w.dir = dir
+   w.img = love.graphics.newImage("/Assets/Wind.png")
    return w
 end
 
-function Wind:move(dir, speed, active)
-	-- update pos
-	self.posx = self.posx + ( dir[1] * speed );
-	self.posy = self.posy + ( dir[2] * speed );
 
-   -- if still active, generate new wind
-   if active and self.posx > 800 then
-      self.posx = 0  
-      self.posy = math.random(600) 
-   end
+function Wind:update()
+	-- update pos
+   local speed = 1
+	self.posx = self.posx + ( self.dir[1] * speed )
+	self.posy = self.posy + ( self.dir[2] * speed )
 end
 
 

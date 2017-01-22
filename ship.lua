@@ -15,8 +15,9 @@ function Ship.create(i)
    s.sinkst = 0.0            -- sinking timer
    s.posx = math.random(800)      
    s.posy = math.random(600) 
-   s.img = love.graphics.newImage("/Assets/ShellShip.png")
-   s.img2 = love.graphics.newImage("/Assets/ShellShip_sink.png")
+   s.img = love.graphics.newImage("/Assets/ShellShip-unsank.png")
+   s.img2 = love.graphics.newImage("/Assets/ShellShip-sank.png")
+   s.img3 = love.graphics.newImage("/Assets/ShellShip-sankest.png")
    return s
 end
 
@@ -44,18 +45,17 @@ function  Ship:sinking()
    else
       self.sinkst = self.sinkst + love.timer.getDelta()
    end
-   local ratio = self.sinkst / sink_limit
-   if ratio > 0.5 then
-      return true
-   else 
-      return false
-   end
+   return (self.sinkst / sink_limit)
 end
 
 
 function Ship:draw()
-   if self.active and Ship:sinking() then
-      love.graphics.draw(self.img2, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+   if self.active then
+      if Ship:sinking() > 0.8 then
+         love.graphics.draw(self.img3, self.posx, self.posy, 0, 0.1, 0.1, 0, 0) 
+      elseif Ship:sinking() > 0.4 then
+         love.graphics.draw(self.img2, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
+      end
    else
    	love.graphics.draw(self.img, self.posx, self.posy, 0, 0.1, 0.1, 0, 0)
    end

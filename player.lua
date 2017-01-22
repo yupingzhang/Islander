@@ -69,11 +69,11 @@ end
 
 -- update ship/island index
 function Player:jumpTo(index)
-	if	self.onShip == -1 then
+	if	self.onShip == 0 then
 	    self.onShip = index
 	else
 		self.onIsland = index
-		self.onShip = -1
+		self.onShip = 0
 	end
 end
 

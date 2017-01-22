@@ -3,7 +3,7 @@ require 'Player'
 require "Island"
 require "Addon"
 require 'Ship'
-require 'wind'
+require 'Wind'
 
 -- debug
 local debug_msg = ""
@@ -11,7 +11,7 @@ local debug_msg = ""
 -- const
 local wind_dir = {0, 0}
 local wind_dir_scale = 0.005
-local wind_tlimit = 1         -- time in seconds generating wind per stroke
+local wind_tlimit = 15         -- time in seconds generating wind per stroke
 local ocean_waves_dir = {1, 0}
 local ocean_waves_speed = 1
 local num_ships = 5
@@ -62,6 +62,7 @@ function love.load()
    has_wind = false
    wind_st = {0, 0}
    start = love.timer.getTime()
+   wind = {}
 
    createScene() 
 end
@@ -85,7 +86,7 @@ function findnearestshipisland(pos, type)
     if type == "ship" then
       for i=1, num_ships do
         ship_pos = ships[i]:getPosition()
-        dist = (pos[1]-ship_pos[1])*(pos[1]-ship_pos[1]) + (pos[2]-ship_pos[2])*(pos[2]-ship_pos[2]) 
+        dist = (pos[1]-ship_pos[1]-50)*(pos[1]-ship_pos[1]-50) + (pos[2]-ship_pos[2]-50)*(pos[2]-ship_pos[2]-50) 
         if dist < distance then
           distance = dist
           index = i
@@ -102,7 +103,10 @@ function love.update(dt)
     
     -- wind control reset
     curr = love.timer.getTime()
-    if has_wind then
+    if has_wind and next(wind) ~= nil then
+       for i=1,10 do
+         wind[i]:update()
+       end
        if (curr - start) > wind_tlimit then
           has_wind = false
        end
@@ -111,7 +115,7 @@ function love.update(dt)
     for i=1,num_ships do
         ships[i]:move(ocean_waves_dir, wind_dir, ocean_waves_speed)
         if player.onShip == i then
-          player.move( ships[i].getPosition() )
+          player:setPosition( ships[i]:getPosition() )
         end
     end
 
@@ -145,6 +149,10 @@ function love.mousereleased(x, y, button, istouch)
       wind_dir[2] = ( y - wind_st[2] ) * wind_dir_scale 
       has_wind = true
       start = love.timer.getTime()
+
+      for i=1,10 do
+        wind[i] = Wind.create( player:getPosition(), wind_dir )
+      end
    end
 end
 
@@ -165,13 +173,16 @@ function love.draw()
 
     player:draw()
 
-    if wind_dir[1] > 0.001 then
-      -- draw wind
+    if has_wind and next(wind) ~= nil then
+      for i=1,10 do
+        wind[i]:draw()
+      end 
     end
 
     -- draw debug info
-    -- love.graphics.setColor(0, 0, 255, 255)
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(0, 0, 255, 255)
     debug_msg = "Player status: onShip? %f" .. string.format("%f", player.onShip)
-    -- love.graphics.printf(debug_msg, 78, 100, 100)
+    love.graphics.setColor(r, g, b, a)
 end
 
