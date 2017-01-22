@@ -41,11 +41,7 @@ end
 
 
 function  Ship:sinking()
-   if self.sinkst == nil then 
-      self.sinkst = 0.0 
-   else
-      self.sinkst = self.sinkst + love.timer.getDelta()
-   end
+   self.sinkst = self.sinkst + love.timer.getDelta()
    return (self.sinkst / sink_limit)
 end
 

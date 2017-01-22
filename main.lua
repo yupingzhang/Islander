@@ -57,7 +57,7 @@ function createScene()
 		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
   -- create the end destination
-  islands[num_islands + 1] = Island.create(num_islands + 1, map_size[1] - 300, map_size[2] - 300)
+  islands[num_islands + 1] = Island.create(num_islands + 1, map_size[1] - 300, 1200)
   islands[num_islands + 1]:initTemple()
 
   player:setPosition( {islands[1].posx, islands[1].posy} ) 
@@ -172,8 +172,10 @@ function love.keypressed(key)
       if idx ~= 0 then
          if type == "ship" then
             ships[idx].active = true  -- active sinking
+            ships[idx].sinkst = 0.0 
          elseif type  == "island" then
             ships[player.onShip].active = false
+            ships[player.onShip].sinkst = 0.0 
          end
          player:jumpTo(type, idx)
          
