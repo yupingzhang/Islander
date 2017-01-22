@@ -1,3 +1,5 @@
+require 'math'
+
 Player = {}
 Player.__index = Player
 
@@ -53,8 +55,19 @@ function Player:setPosition(pos)
 end
 
 -- check if the character is on anything and not falling into the ocean
-function Player:aliveCheck()
-	-- body
+function Player:aliveCheck(pos)
+    -- 1. on a island and fall into ocean
+	local threshold = 30
+	if	self.onIsland > 0 then
+		local a = pos[1] - self.posx
+		local b = pos[2] - self.posy
+		if math.abs(a) > threshold or math.abs(b) > threshold then
+            return false
+		end
+	end
+    -- 2. on a ship and ship sank
+    -- handled in the main love.update
+	return true -- alive
 end
 
 function Player:jumpCheck()

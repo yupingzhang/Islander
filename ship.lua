@@ -12,6 +12,7 @@ function Ship.create(i)
    setmetatable(s, Ship)  
    s.idx = i
    s.active = false          -- flag whether character is on the ship
+   s.sank = false
    s.sinkst = 0.0            -- sinking timer
    s.posx = math.random(800)      
    s.posy = math.random(600) 
@@ -51,6 +52,10 @@ end
 
 function Ship:draw()
    if self.active then
+      if Ship:sinking() > 0.99 then
+         self.sank = true               -- update if the ship sank
+         return
+      end
       if Ship:sinking() > 0.8 then
          love.graphics.draw(self.img3, self.posx, self.posy, 0, 0.1, 0.1, 0, 0) 
       elseif Ship:sinking() > 0.4 then

@@ -11,6 +11,7 @@ local util = require "Utility"
 local debug_msg = ""
 
 -- const
+local isalive = true
 local wind_dir = {0, 0}
 local wind_dir_scale = 0.005
 local wind_tlimit = 15         -- time in seconds generating wind per stroke
@@ -52,7 +53,7 @@ function createScene()
 		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
 
-  player:setPosition( {islands[1].posx + 25, islands[1].posy + 30} )
+  player:setPosition( {islands[1].posx, islands[1].posy} ) 
    
   -- array of ships 
   -- util.randomControl()
@@ -78,13 +79,12 @@ end
 -- when the jump gets triggered
 -- check the type of object that the character allows to jump to
 function findnearestshipisland(pos, type)
-    local distance = 100.0   -- threshold
+    local distance = 200.0   -- threshold
     local index = 0;
-
     if type == "island" then
       for i=1,num_islands do
         island_pos = islands[i]:getPosition()
-        dist = (pos[1] - island_pos[1] - 100) * (pos[1] - island_pos[1] - 100) + (pos[2] - island_pos[2] - 100) * (pos[2] - island_pos[2] - 100) 
+        dist = (pos[1] - island_pos[1]) * (pos[1] - island_pos[1]) + (pos[2] - island_pos[2]) * (pos[2] - island_pos[2]) 
         if dist < distance then
           distance = dist
           index = i
@@ -95,7 +95,7 @@ function findnearestshipisland(pos, type)
     if type == "ship" then
       for i=1, num_ships do
         ship_pos = ships[i]:getPosition()
-        dist = (pos[1]-ship_pos[1]-50)*(pos[1]-ship_pos[1]-50) + (pos[2]-ship_pos[2]-50)*(pos[2]-ship_pos[2]-50) 
+        dist = (pos[1]-ship_pos[1])*(pos[1]-ship_pos[1]) + (pos[2]-ship_pos[2])*(pos[2]-ship_pos[2]) 
         if dist < distance then
           distance = dist
           index = i
@@ -109,6 +109,15 @@ end
 
 function love.update(dt)
     player:handleUpdate()
+    if player.onIsland > 0 then
+       isalive = player:aliveCheck(islands[player.onIsland]:getPosition())
+    elseif player.onShip > 0 then
+       isalive = ships[player.onShip].sank
+    end
+    if isalive == false then
+       -- draw game over
+       return
+    end
     
     -- wind control reset
     curr = love.timer.getTime()
@@ -180,18 +189,27 @@ function love.draw()
       ships[i]:draw()
     end
 
-    player:draw()
-
     if has_wind and next(wind) ~= nil then
       for i=1,10 do
         wind[i]:draw()
       end 
     end
 
+    if isalive == true then
+       player:draw()
+    else 
+       _img = love.graphics.newImage("a.png")
+       love.graphics.draw( _img, 300, 300, 0, 1, 1, 0, 0 )
+       local r, g, b, a = love.graphics.getColor()
+       love.graphics.setColor(0, 0, 0, 255)
+       love.graphics.printf("Game over!!!", 200, 250, 400, "left", 0, 5, 5, 0, 0, 0, 0)
+       love.graphics.setColor(r, g, b, a)
+    end
+
     -- draw debug info
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor(0, 0, 0, 255)
-    debug_msg = "Player status: onShip? " .. string.format("%f", player.onShip)
+    debug_msg = "Player status: onShip? onIsland? " .. string.format("%f", player.onShip) .. string.format("%f", player.onIsland) .. "Isalive: " .. string.format("%s", isalive)
     -- debug_msg = "Island: " .. string.format("%f %f", islands[2].posx, islands[2].posy)
     love.graphics.printf(debug_msg, 200, 200, 400, "left")
     love.graphics.setColor(r, g, b, a)
