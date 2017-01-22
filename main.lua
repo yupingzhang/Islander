@@ -53,15 +53,15 @@ function createScene()
   random_pos = util.randomControl(map_size[1], map_size[2], num_islands)
   -- create the start point
   islands[1] = Island.create(1, 200, 1900)
-	for i=2,num_islands do
+	for i=2,num_islands-1 do
 		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
   -- create the end destination
-  islands[num_islands + 1] = Island.create(num_islands + 1, map_size[1] - 300, 1200)
-  islands[num_islands + 1]:initTemple()
+  islands[num_islands] = Island.create(num_islands + 1, 400, 1000)
+  islands[num_islands]:initTemple()
 
   player:setPosition( {islands[1].posx, islands[1].posy} ) 
-  cam:setPosition(0, 0)  -- {islands[1].posx, islands[1].posy} 
+  cam:setPosition(0, 0)
    
   -- array of ships 
   random_pos = util.randomControl(map_size[1], map_size[2], num_ships)
@@ -92,11 +92,12 @@ end
 -- when the jump gets triggered
 -- check the type of object that the character allows to jump to
 function findnearestshipisland(pos, type)
-    local island_threshold = 600.0   -- threshold
-    local ship_threshold = 500.0   -- threshold
+    local islandBig_threshold = 1500.0
+    local island_threshold = 600.0    
+    local ship_threshold = 500.0   
     local index = 0;
     if type == "island" then
-      for i=1,num_islands do
+      for i=1,num_islands - 1 do
         island_pos = islands[i]:getPosition()
         dist = (pos[1] - island_pos[1]) * (pos[1] - island_pos[1]) + (pos[2] - island_pos[2]) * (pos[2] - island_pos[2]) 
         if dist < island_threshold then
@@ -104,6 +105,10 @@ function findnearestshipisland(pos, type)
           index = i
         end
       end
+      -- for the big island in the end
+      -- todo: 
+
+
     end
 
     if type == "ship" then

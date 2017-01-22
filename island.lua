@@ -34,12 +34,13 @@ end
 function Island:initTemple()
 	-- overwrite the image
 	self.img = love.graphics.newImage("/Assets/IslandBig-unactivated.png")
+	self.img2 = love.graphics.newImage("/Assets/IslandBig.png")
 end
 
 function Island:ripple(strength)
-	-- if self.addon == nil then
-	-- 	return
-	-- end
+	if self.addon == nil then
+		return
+	end
 	local rad_base = 50
 	local r, g, b, a = love.graphics.getColor()
 	love.graphics.setColor(14, 63, 111)
