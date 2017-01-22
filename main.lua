@@ -5,6 +5,8 @@ require "Addon"
 require 'Ship'
 require 'Wind'
 
+local util = require "Utility"
+
 -- debug
 local debug_msg = ""
 
@@ -15,10 +17,11 @@ local wind_tlimit = 15         -- time in seconds generating wind per stroke
 local ocean_waves_dir = {1, 0}
 local ocean_waves_speed = 1
 local num_ships = 5
-local num_islands = 10
+local num_islands = 15
 local map_display_h = 3
 local map_display_w = 4
-local window_size = { love.graphics.getWidth(), love.graphics.getHeight() }
+local map_size = { 4000, 3000 }
+local window_size = { love.graphics.getWidth(), love.graphics.getHeight() } -- 800, 600
 
 -- giving the character position, center the camera and only draw the tiles visiable
 function draw_map(pos)
@@ -40,14 +43,19 @@ function createScene()
   player = Player.new ()
 
 	-- create an array of islands
+  random_pos = util.randomControl(map_size[1], map_size[2], num_islands)
 	islands = {}
-	for i=1,num_islands do
-		islands[i] = Island.create(i) 
+  -- create the start point
+  islands[1] = Island.create(1, 700, 500)
+
+	for i=2,num_islands do
+		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
 	end
 
-  player:setPosition( {islands[2].posx + 25, islands[2].posy + 30} )
+  player:setPosition( {islands[1].posx + 25, islands[1].posy + 30} )
    
   -- array of ships 
+  -- util.randomControl()
   ships = {}
   for i=1,num_ships do
 	 	ships[i] = Ship.create(i) 
@@ -75,11 +83,12 @@ function findnearestshipisland(pos, type)
 
     if type == "island" then
       for i=1,num_islands do
-        --dist = (pos[1] - [1]) * (pos[1] - islands[i][1]) + (pos[2] - islands[i][2]) * (pos[2] - islands[i][2]) 
-        -- if dist < distance then
-        --   distance = dist
-        --   index = i
-        -- end
+        island_pos = islands[i]:getPosition()
+        dist = (pos[1] - island_pos[1] - 100) * (pos[1] - island_pos[1] - 100) + (pos[2] - island_pos[2] - 100) * (pos[2] - island_pos[2] - 100) 
+        if dist < distance then
+          distance = dist
+          index = i
+        end
       end
     end
 
@@ -181,8 +190,10 @@ function love.draw()
 
     -- draw debug info
     local r, g, b, a = love.graphics.getColor()
-    love.graphics.setColor(0, 0, 255, 255)
-    debug_msg = "Player status: onShip? %f" .. string.format("%f", player.onShip)
+    love.graphics.setColor(0, 0, 0, 255)
+    debug_msg = "Player status: onShip? " .. string.format("%f", player.onShip)
+    -- debug_msg = "Island: " .. string.format("%f %f", islands[2].posx, islands[2].posy)
+    love.graphics.printf(debug_msg, 200, 200, 400, "left")
     love.graphics.setColor(r, g, b, a)
 end
 

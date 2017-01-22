@@ -11,11 +11,14 @@ Class:
 -- Add-on
 
 
+###Done:
+-- wind
+-- island distribution
 
-Todo:
+
+###Todo:
 -- jump
 
--- add wind
 
 -- animate the camera, from beginning to the end
 

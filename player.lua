@@ -14,14 +14,12 @@ function Player.new ()
     player.delx = 0
     player.dely = 0
     player.img = Player.loadImages()
-    player.onShip = -1      
+    player.onShip = 0      
     player.onIsland = 1
     return player
 end
 
 function Player:handleUpdate()
-
-	-- hack
 	-- no move when on a ship
 	if self.onShip > 0 then
 		return
