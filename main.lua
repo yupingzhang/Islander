@@ -21,7 +21,7 @@ local num_ships = 5
 local num_islands = 15
 local map_display_h = 3
 local map_display_w = 4
-local map_size = { 4000, 3000 }
+local map_size = { 3000, 2200 }
 local window_size = { love.graphics.getWidth(), love.graphics.getHeight() } -- 800, 600
 
 -- giving the character position, center the camera and only draw the tiles visiable
@@ -47,7 +47,7 @@ function createScene()
   random_pos = util.randomControl(map_size[1], map_size[2], num_islands)
 	islands = {}
   -- create the start point
-  islands[1] = Island.create(1, 700, 500)
+  islands[1] = Island.create(1, 400, 500)
 
 	for i=2,num_islands do
 		islands[i] = Island.create(i, random_pos[i][1], random_pos[i][2]) 
@@ -79,13 +79,14 @@ end
 -- when the jump gets triggered
 -- check the type of object that the character allows to jump to
 function findnearestshipisland(pos, type)
-    local distance = 200.0   -- threshold
+    local island_threshold = 600.0   -- threshold
+    local ship_threshold = 300.0   -- threshold
     local index = 0;
     if type == "island" then
       for i=1,num_islands do
         island_pos = islands[i]:getPosition()
         dist = (pos[1] - island_pos[1]) * (pos[1] - island_pos[1]) + (pos[2] - island_pos[2]) * (pos[2] - island_pos[2]) 
-        if dist < distance then
+        if dist < island_threshold then
           distance = dist
           index = i
         end
@@ -96,7 +97,7 @@ function findnearestshipisland(pos, type)
       for i=1, num_ships do
         ship_pos = ships[i]:getPosition()
         dist = (pos[1]-ship_pos[1])*(pos[1]-ship_pos[1]) + (pos[2]-ship_pos[2])*(pos[2]-ship_pos[2]) 
-        if dist < distance then
+        if dist < ship_threshold then
           distance = dist
           index = i
         end
@@ -109,15 +110,6 @@ end
 
 function love.update(dt)
     player:handleUpdate()
-    if player.onIsland > 0 then
-       isalive = player:aliveCheck(islands[player.onIsland]:getPosition())
-    elseif player.onShip > 0 then
-       isalive = ships[player.onShip].sank
-    end
-    if isalive == false then
-       -- draw game over
-       return
-    end
     
     -- wind control reset
     curr = love.timer.getTime()
@@ -133,8 +125,21 @@ function love.update(dt)
     for i=1,num_ships do
         ships[i]:move(ocean_waves_dir, wind_dir, ocean_waves_speed)
         if player.onShip == i then
-          player:setPosition( ships[i]:getPosition() )
+          local shipPosition = ships[i]:getPosition()
+          local offset_shipPosition = {shipPosition[1] - 5, shipPosition[2] - 20} 
+          player:setPosition( offset_shipPosition )
         end
+    end
+
+    -- isalive check
+    if player.onShip > 0 then
+       isalive = not ships[player.onShip].sank
+    elseif player.onIsland > 0 then
+       isalive = player:aliveCheck(islands[player.onIsland]:getPosition())
+    end
+    if isalive == false then
+       -- no update anymore
+       return
     end
 
 end
@@ -147,7 +152,12 @@ function love.keypressed(key)
       local type = player:jumpCheck()
       local player_pos = player:getPosition()
       local idx = findnearestshipisland(player_pos, type)
-      player:jumpTo(idx)
+      if idx ~= 0 then
+         player:jumpTo(type, idx)
+         if type == "ship" then
+            ships[idx].active = true  -- active sinking
+         end
+      end
    end
 end
 

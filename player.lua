@@ -57,7 +57,7 @@ end
 -- check if the character is on anything and not falling into the ocean
 function Player:aliveCheck(pos)
     -- 1. on a island and fall into ocean
-	local threshold = 30
+	local threshold = 50
 	if	self.onIsland > 0 then
 		local a = pos[1] - self.posx
 		local b = pos[2] - self.posy
@@ -79,9 +79,10 @@ function Player:jumpCheck()
 end
 
 -- update ship/island index
-function Player:jumpTo(index)
-	if	self.onShip == 0 then
+function Player:jumpTo(type, index)
+	if type == "ship" then
 	    self.onShip = index
+	    self.onIsland = 0
 	else
 		self.onIsland = index
 		self.onShip = 0
