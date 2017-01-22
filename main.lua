@@ -58,6 +58,7 @@ function createScene()
 	end
   -- create the end destination
   islands[num_islands + 1] = Island.create(num_islands + 1, map_size[1] - 300, map_size[2] - 300)
+  islands[num_islands + 1]:initTemple()
 
   player:setPosition( {islands[1].posx, islands[1].posy} ) 
   cam:setPosition(0, 0)  -- {islands[1].posx, islands[1].posy} 
@@ -85,7 +86,7 @@ function love.load()
 
    -- audio
    sound = love.audio.newSource("/Sound/Fearless.mp3", "static")
-   sound:play()
+   -- sound:play()
 end
 
 -- when the jump gets triggered
@@ -169,12 +170,13 @@ function love.keypressed(key)
       local player_pos = player:getPosition()
       local idx = findnearestshipisland(player_pos, type)
       if idx ~= 0 then
-         player:jumpTo(type, idx)
          if type == "ship" then
             ships[idx].active = true  -- active sinking
-         else
-            ships[idx].active = false
+         elseif type  == "island" then
+            ships[player.onShip].active = false
          end
+         player:jumpTo(type, idx)
+         
       end
    end
 end

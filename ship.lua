@@ -5,7 +5,7 @@ require 'math'
 Ship = {}
 Ship.__index = Ship
 
-local sink_limit = 100  -- seconds
+local sink_limit = 300  -- seconds
 
 function Ship.create(i, x, y)
    local s = {}              -- our new object

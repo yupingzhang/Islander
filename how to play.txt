@@ -8,5 +8,10 @@ Control
 
 
 
+-- Win:
+   find the temple and put the key in 
 
+-- Die:
+   1. fall into the ocean when walk over an island
+   2. on a turtle shell and sank
 

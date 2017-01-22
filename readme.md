@@ -8,26 +8,34 @@ Class:
 
 -- Island
 
+-- Wind
+
+-- Camera
+
 -- Add-on
 
 
 ###Done:
+-- player
+-- Ship
+-- sink
+-- Island
 -- wind
 -- ripple
 -- island distribution
 -- Player on island movement aliveCheck
 -- Check player is alive 
--- jump
+-- player jump
 -- Game over
+-- animate the camera
 
 
 ###Todo:
 
--- animate the camera, from beginning to the end
-
 -- character animation
 
 -- collision between islands and ships
+
 -- fix the overlay problem (Hide the bottom half if behind other object)
 
 -- add moster and instruments

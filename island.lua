@@ -31,6 +31,11 @@ function Island:addon(obj)
 	self.addon = obj
 end
 
+function Island:initTemple()
+	-- overwrite the image
+	self.img = love.graphics.newImage("/Assets/IslandBig-unactivated.png")
+end
+
 function Island:ripple(strength)
 	-- if self.addon == nil then
 	-- 	return
